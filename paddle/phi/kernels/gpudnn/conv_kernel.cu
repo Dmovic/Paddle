@@ -40,6 +40,7 @@
 #include "paddle/phi/backends/dynload/cudnn_frontend.h"
 #include "paddle/phi/kernels/autotune/cache.h"
 #include "paddle/phi/kernels/gpudnn/conv_cudnn_frontend.h"
+#include "paddle/phi/kernels/gpudnn/conv_gpudnn.h"
 // clang-format on
 #endif
 
@@ -557,30 +558,6 @@ void Conv3DCudnnKernel(const Context& dev_ctx,
                      data_format,
                      out);
 }
-
-template <typename T, typename Context>
-void DepthwiseConvCudnnKernel(const Context& dev_ctx,
-                              const DenseTensor& input,
-                              const DenseTensor& filter,
-                              const std::vector<int>& strides,
-                              const std::vector<int>& paddings,
-                              const std::string& padding_algorithm,
-                              int groups,
-                              const std::vector<int>& dilations,
-                              const std::string& data_format,
-                              DenseTensor* out) {
-  ConvCudnnKernel<T>(dev_ctx,
-                     input,
-                     filter,
-                     strides,
-                     paddings,
-                     padding_algorithm,
-                     dilations,
-                     groups,
-                     data_format,
-                     out);
-}
-
 }  // namespace phi
 
 #ifdef PADDLE_WITH_HIP
@@ -650,6 +627,13 @@ PD_REGISTER_KERNEL(conv3d,
                    phi::Conv3DCudnnKernel,
                    float,
                    double,
+                   phi::dtype::float16) {}
+
+PD_REGISTER_KERNEL(depthwise_conv2d,
+                   GPUDNN,
+                   ALL_LAYOUT,
+                   phi::DepthwiseConvCudnnKernel,
+                   float,
                    phi::dtype::float16) {}
 #endif
 

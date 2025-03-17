@@ -760,37 +760,6 @@ void Conv3DCudnnGradKernel(const Context& dev_ctx,
 }
 
 template <typename T, typename Context>
-void DepthwiseConvCudnnGradKernel(const Context& dev_ctx,
-                                  const DenseTensor& input,
-                                  const DenseTensor& filter,
-                                  const DenseTensor& out_grad,
-                                  const std::vector<int>& strides,
-                                  const std::vector<int>& paddings,
-                                  const std::string& padding_algorithm,
-                                  int groups,
-                                  const std::vector<int>& dilations,
-                                  const std::string& data_format,
-                                  bool use_addto,
-                                  int workspace_size_MB,
-                                  bool exhaustive_search,
-                                  bool fuse_relu,
-                                  DenseTensor* input_grad,
-                                  DenseTensor* filter_grad) {
-  ConvCudnnGradKernel<T>(dev_ctx,
-                         input,
-                         filter,
-                         out_grad,
-                         strides,
-                         paddings,
-                         padding_algorithm,
-                         dilations,
-                         groups,
-                         data_format,
-                         input_grad,
-                         filter_grad);
-}
-
-template <typename T, typename Context>
 void ConvCudnnGradGradKernel(
     const Context& ctx,
     const DenseTensor& input,
